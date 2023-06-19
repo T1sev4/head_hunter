@@ -1,14 +1,17 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
 
-const app = express();
+const userEmail = 'ostintimberlake@gmail.com'
+const passwordGmail = 'asgbkyswuiqyfhna';
+
+
 
 // Настройка транспорта для отправки email через Gmail
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'your-email@gmail.com', // ваш адрес электронной почты Gmail
-    pass: 'your-password', // ваш пароль от почты Gmail
+    user: userEmail, // ваш адрес электронной почты Gmail
+    pass: passwordGmail, // ваш пароль от почты Gmail
   },
 });
 
@@ -16,10 +19,10 @@ const transporter = nodemailer.createTransport({
 function sendMail(to, subject, text) {
   // Параметры email сообщения
   const mailOptions = {
-    from: 'your-email@gmail.com', // от кого
-    to: 'recipient@example.com', // кому
-    subject: 'Тема письма',
-    text: 'Привет, это текст email сообщения!',
+    from: userEmail, // от кого
+    to: to, // кому
+    subject: subject,
+    text: text,
   };
 
   // Отправка email
