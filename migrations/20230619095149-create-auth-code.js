@@ -18,7 +18,7 @@ module.exports = {
         allowNull: false,
       },
       valid_till: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DATE(6),
         allowNull: false,
       },
     });

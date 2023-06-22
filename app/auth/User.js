@@ -25,7 +25,11 @@ const User = sequelize.define('User', {
     allowNull: true,
   },
 
-});
+},
+{
+  timestamps: false, // Отключение автоматических полей createdAt и updatedAt
+}
+);
 
 User.belongsTo(Role, {
   foreignKey: 'RoleId',

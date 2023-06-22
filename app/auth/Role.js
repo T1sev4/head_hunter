@@ -7,7 +7,11 @@ const Role = sequelize.define('Role', {
     allowNull: false,
     unique: true,
   },
-});
+},
+{
+  timestamps: false, // Отключение автоматических полей createdAt и updatedAt
+}
+);
 
 
 
