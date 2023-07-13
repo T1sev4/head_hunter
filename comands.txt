@@ -24,3 +24,4 @@ npx sequelize-cli db:seed --seed <seed-file-name>
 
 
 
+остановился на уроке 7 часть 1 18:00(время)
