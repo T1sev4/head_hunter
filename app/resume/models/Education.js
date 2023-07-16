@@ -35,4 +35,4 @@ Education.belongsTo(Resume, {
 
 
 
-module.exports = WorkingHistory;
+module.exports = Education;

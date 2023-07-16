@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../../config/db');
+const sequelize = require('../../../config/db');
 const Resume = require('./Resume');
-const EmploymentType = require('../employment-type/EmploymentType');
+const EmploymentType = require('../../employment-type/EmploymentType');
 const ResumeEmploymentType = sequelize.define('ResumeEmploymentType', {
   id:{
     type: DataTypes.INTEGER,
@@ -15,12 +15,16 @@ const ResumeEmploymentType = sequelize.define('ResumeEmploymentType', {
   }
 ); 
 
-Resume.belongsTo(EmploymentType, {
-  through: ResumeEmploymentType
+Resume.belongsToMany(EmploymentType, {
+  through: ResumeEmploymentType,
+  foreignKey: 'resumeId',
+  otherKey: 'employmentTypeId'
 });
 
-EmploymentType.belongsTo(Resume, {
-  through: ResumeEmploymentType
+EmploymentType.belongsToMany(Resume, {
+  through: ResumeEmploymentType,
+  foreignKey: 'employmentTypeId',
+  otherKey: 'resumeId'
 });
 
 
