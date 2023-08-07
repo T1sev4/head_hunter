@@ -1,3 +1,4 @@
+const Resume = require('./models/Resume');
 const validateResume = (req, res, next) => {
   let errors = {};
 
@@ -20,7 +21,16 @@ const validateResume = (req, res, next) => {
   if(JSON.stringify(errors) !== JSON.stringify({})) res.status(400).send(errors)
   else next()
 }
+const isAuthorOfResume = async (req, res, next) => {
+  const id = req.params.id || req.body.id
+
+  const resume = await Resume.findByPk(id)
+  if(!resume) res.status(400).send({message: "Resume with that id is not exist"})
+  else if(req.user.id === resume.userId) next();
+  else res.status(403).send({message: "Access Forbidden"})
+}
 
 module.exports = {
-  validateResume
+  validateResume,
+  isAuthorOfResume
 }

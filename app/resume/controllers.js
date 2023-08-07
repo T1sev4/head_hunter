@@ -109,8 +109,20 @@ const getResume = async (req, res) => {
 
 }
 
+const deleteResume = async (req, res) => {
+  const data = await Resume.destroy({
+    where: {
+      id: req.params.id,
+    },
+  })
+  console.log(data)
+
+  res.status(200).end()
+}
+
 module.exports = {
   createResume,
   getMyResumes,
-  getResume
+  getResume,
+  deleteResume
 }
