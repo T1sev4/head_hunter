@@ -2,6 +2,7 @@ const sendMail = require('../utils/sendMail');
 const AuthCode = require('./AuthCode');
 const User = require('./User');
 const Role = require('./Role');
+const Company = require('./Company');
 const jwt = require('jsonwebtoken');
 const {jwtOptions} = require('./passport');
 
@@ -68,7 +69,32 @@ const verifyCode = async (req, res) => {
   }  
 }
 
+const signUp = async (req, res) => {
+
+  const role = await Role.findOne({
+    where: {
+      name: 'manager'
+    }
+  })
+
+  const company = await Company.create({
+    name: req.body.company.name,
+    description: req.body.company.description,
+    address: req.body.address
+  })
+
+  const user = await User.create({
+    email: req.body.email,
+    password: req.body.password,
+    full_name: req.body.full_name,
+    CompanyId: company.id,
+    RoleId: role.id
+  })
+
+}
+
 module.exports = {  
   sendVerificationEmail,
-  verifyCode
+  verifyCode,
+  signUp
 };
