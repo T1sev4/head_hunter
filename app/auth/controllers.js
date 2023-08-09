@@ -102,8 +102,50 @@ const signUp = async (req, res) => {
   res.status(200).end();
 }
 
+const logIn = async (req, res) => {
+  if(
+      !req.body.email || req.body.email.length === 0||
+      !req.body.password || req.body.password.length === 0
+    ){
+      res.status(401).send({message: "Bad Credentials"})
+    }else{
+      const user = await User.findOne({
+        where: {
+          email: req.body.email
+        }
+      })
+
+      if(!user) return res.status(401).send({message: "User with that email is not exist"})
+      
+
+      const isMatch = await bcrypt.compare(req.body.password, user.password);
+      if(isMatch){
+        const role = await Role.findByPk(user.RoleId)
+        const token = jwt.sign({
+          id: user.id, 
+          email: user.email,
+          full_name: user.full_name,
+          phone: user.phone,
+          role: {
+            id: role.id,
+            name: role.name
+          }
+  
+        }, 
+          jwtOptions.secretOrKey, 
+        {
+          expiresIn: 24 * 60 * 60 * 365
+        })
+        res.status(200).send({token});
+      }else{
+        res.status(401).send({message: "Password is incorrect"})
+      }
+    }
+}
+
 module.exports = {  
   sendVerificationEmail,
   verifyCode,
-  signUp
+  signUp,
+  logIn
 };
