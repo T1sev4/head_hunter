@@ -84,7 +84,7 @@ const signUp = async (req, res) => {
     name: req.body.company_name,
     description: req.body.company_description,
     address: req.body.company_address,
-    logo: '/public/company/' + req.file.filename
+    logo: '/company/' + req.file.filename
   })
 
   // хэширование пароля

@@ -4,6 +4,7 @@ const passport = require('passport');
 const app = express();
 
 app.use(logger('dev'));
+app.use(express.static(__dirname + '/public'))
 app.use(express.urlencoded());
 app.use(express.json());
 app.use(passport.initialize());
