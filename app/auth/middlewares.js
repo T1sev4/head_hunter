@@ -31,8 +31,8 @@ const validateSignUp = async (req, res, next) => {
   if(!req.body.full_name || req.body.full_name.length === 0){
     errors.full_name = "Поле Имя и Фамилия обязательное"
   }
-  if(!req.body.company || !req.body.company.name || req.body.company.name.length === 0){
-    errors.company = "Поле Имя компании обязательное"
+  if(!req.body.company_name || req.body.company_name.length === 0){
+    errors.company_name = "Поле Имя компании обязательное"
   }
   if(!req.body.password || req.body.password.length === 0){
     errors.password = "Поле Пароль обязательное"

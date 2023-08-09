@@ -1,10 +1,13 @@
+const jwt = require('jsonwebtoken');
+const {jwtOptions} = require('./passport');
+const bcrypt = require('bcrypt');
+
 const sendMail = require('../utils/sendMail');
 const AuthCode = require('./AuthCode');
 const User = require('./User');
 const Role = require('./Role');
 const Company = require('./Company');
-const jwt = require('jsonwebtoken');
-const {jwtOptions} = require('./passport');
+
 
 const sendVerificationEmail = (req, res) => {
   const code = 'HH' + Date.now();
@@ -78,19 +81,25 @@ const signUp = async (req, res) => {
   })
 
   const company = await Company.create({
-    name: req.body.company.name,
-    description: req.body.company.description,
-    address: req.body.address
+    name: req.body.company_name,
+    description: req.body.company_description,
+    address: req.body.company_address,
+    logo: req.body.company_logo
   })
 
-  const user = await User.create({
+  // хэширование пароля
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+  await User.create({
     email: req.body.email,
-    password: req.body.password,
+    password: hashedPassword,
     full_name: req.body.full_name,
     CompanyId: company.id,
     RoleId: role.id
   })
 
+  res.status(200).end();
 }
 
 module.exports = {  
