@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../../config/db');
+const SpecializationType = require('./SpecializationType')
 
 const Specialization = sequelize.define('Specialization', {
     name: {
@@ -13,8 +14,11 @@ const Specialization = sequelize.define('Specialization', {
   }
 ); 
 
-Specialization.belongsTo(Country, {
+Specialization.belongsTo(SpecializationType, {
   foreignKey: 'specializationTypeId',
 });
-
+SpecializationType.hasMany(Specialization, {
+  foreignKey: 'specializationTypeId',
+  as: "specialization"
+})
 module.exports = Specialization;
