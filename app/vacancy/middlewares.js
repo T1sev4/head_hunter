@@ -23,7 +23,8 @@ const validateVacancy = (req, res, next) => {
 }
 
 const isAuthOfVacancy = async (req, res, next) => {
-  const vacancy = await Vacancy.findByPk(req.params.id)
+  const id = req.params.id || req.body.id
+  const vacancy = await Vacancy.findByPk(id)
 
   if(!vacancy) res.status(400).send({message: "Vacancy with that id is not exist"})
   else if(vacancy.userId === req.user.id) next()

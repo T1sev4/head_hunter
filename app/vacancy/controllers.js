@@ -79,11 +79,35 @@ const deleteVacancy = async (req, res) => {
   })
   res.status(200).end()
 }
-
+const editVacancy = async (req, res) => {
+  await Vacancy.update({
+    name: req.body.name,
+    specializationId: req.body.specializationId,
+    cityId: req.body.cityId,
+    description: req.body.description,
+    employmentTypeId: req.body.employmentTypeId,
+    salary_from: req.body.salary_from,
+    salary_to: req.body.salary_to,
+    salary_type: req.body.salary_type,
+    address: req.body.address,
+    skills: req.body.skills,
+    about_company: req.body.about_company,
+    experienceId: req.body.experienceId,
+    userId: req.user.id,
+    companyId: req.user.CompanyId
+  },
+  {
+    where: {
+      id: req.body.id
+    }
+  })
+  res.status(200).end()
+}
 module.exports = { 
   getExperiences,
   createVacancy,
   getMyVacancies,
   getVacancy,
-  deleteVacancy
+  deleteVacancy,
+  editVacancy
 }
