@@ -67,12 +67,23 @@ const getVacancy = async (req, res) => {
       },
     ]
   })
-  res.status(200).send(vacancy)
+  if(vacancy) res.status(200).send(vacancy)
+  else res.status(404).send({message: "Vacancy with that id is not found"})
+}
+
+const deleteVacancy = async (req, res) => {
+  await Vacancy.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+  res.status(200).end()
 }
 
 module.exports = { 
   getExperiences,
   createVacancy,
   getMyVacancies,
-  getVacancy
+  getVacancy,
+  deleteVacancy
 }
