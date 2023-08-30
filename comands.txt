@@ -22,6 +22,9 @@ npx sequelize-cli seed:generate --name <SeederName>
 // для запуска seed
 npx sequelize-cli db:seed --seed <seed-file-name>
 
+// откатит последнюю примененную миграцию
+npx sequelize-cli db:migrate:undo
+
 
 
 остановился на уроке 9 часть 4 конец
