@@ -4,6 +4,7 @@ const sendMail = require('../utils/sendMail')
 const Vacancy = require('../vacancy/models/Vacancy')
 const Resume = require('../resume/models/Resume')
 const User = require('../auth/User');
+const {Op} = require('sequelize')
 const createApply = async (req, res) => {
   try {
     const apply = await Apply.create({
@@ -29,7 +30,22 @@ const createApply = async (req, res) => {
   }
   
 }
+const getEmployeeApplies = async (req, res) => {
+  const resumes = await Resume.findAll({
+    where: {
+      userId: req.user.id
+    }
+  }) 
+  const ids = resumes.map(item => item.id)
 
+  const applies = await Apply.findAll({
+    where: {
+      resumeId: {[Op.in]: ids}
+    }
+  })
+  res.status(200).send(applies)
+}
 module.exports = {
-  createApply
+  createApply,
+  getEmployeeApplies
 }
