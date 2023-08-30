@@ -45,7 +45,18 @@ const getEmployeeApplies = async (req, res) => {
   })
   res.status(200).send(applies)
 }
+
+const deleteApply = async (req ,res) => {
+  await Apply.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+  res.status(200).end()
+}
+
 module.exports = {
   createApply,
-  getEmployeeApplies
+  getEmployeeApplies,
+  deleteApply
 }
