@@ -1,5 +1,5 @@
 const Apply = require('./Apply');
-const {NEW, INVITATION} = require('./utils')
+const {NEW, INVITATION, DECLINED} = require('./utils')
 const sendMail = require('../utils/sendMail')
 const Vacancy = require('../vacancy/models/Vacancy')
 const Resume = require('../resume/models/Resume')
@@ -72,9 +72,23 @@ const acceptEmployee = async (req, res) => {
   res.status(200).end()
 }
 
+const declineEmployee = async (req, res) => {
+  await Apply.update(
+    {
+      status: DECLINED
+    },
+    {
+    where: {
+      id: req.body.applyId
+    }
+  })
+  res.status(200).end()
+}
+
 module.exports = {
   createApply,
   getEmployeeApplies,
   deleteApply,
-  acceptEmployee
+  acceptEmployee,
+  declineEmployee
 }

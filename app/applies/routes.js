@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {createApply, getEmployeeApplies, deleteApply, acceptEmployee} = require('./controllers');
+const {createApply, getEmployeeApplies, deleteApply, acceptEmployee, declineEmployee} = require('./controllers');
 const {isEmployee, isManager} = require('../auth/middlewares');
 const passport = require('passport')
 const {validateApply, isAuthorOfApply, isApplyExist} = require('./middlewares')
@@ -11,6 +11,7 @@ router.get('/api/applies/employee', passport.authenticate('jwt', { session: fals
 router.delete('/api/applies/:id', passport.authenticate('jwt', { session: false }), isEmployee, isAuthorOfApply, deleteApply); 
 
 router.put('/api/applies/accept/employee', passport.authenticate('jwt', { session: false }), isManager,  isApplyExist, isAuthorOfVacancy, acceptEmployee); 
+router.put('/api/applies/decline/employee', passport.authenticate('jwt', { session: false }), isManager,  isApplyExist, isAuthorOfVacancy, declineEmployee); 
 
 
 
