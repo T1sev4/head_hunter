@@ -22,12 +22,16 @@ const validateResume = (req, res, next) => {
   else next()
 }
 const isAuthorOfResume = async (req, res, next) => {
-  const id = req.params.id || req.body.id
+  try{
+    const id = req.params.id || req.body.id
 
-  const resume = await Resume.findByPk(id)
-  if(!resume) res.status(400).send({message: "Resume with that id is not exist"})
-  else if(req.user.id === resume.userId) next();
-  else res.status(403).send({message: "Access Forbidden"})
+    const resume = await Resume.findByPk(id)
+    if(!resume) res.status(400).send({message: "Resume with that id is not exist"})
+    else if(req.user.id === resume.userId) next();
+    else res.status(403).send({message: "Access Forbidden"})
+  } catch (error) {
+    res.status(500).send(error)
+  }
 }
 
 module.exports = {

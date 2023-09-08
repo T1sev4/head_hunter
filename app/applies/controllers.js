@@ -32,6 +32,7 @@ const createApply = async (req, res) => {
   
 }
 const getEmployeeApplies = async (req, res) => {
+  try{
   const resumes = await Resume.findAll({
     where: {
       userId: req.user.id
@@ -49,86 +50,105 @@ const getEmployeeApplies = async (req, res) => {
     }
   })
   res.status(200).send(applies)
+  } catch (error) {
+    res.status(500).send(error)
+  }
 }
 
 const deleteApply = async (req ,res) => {
-  await Apply.destroy({
-    where: {
-      id: req.params.id
-    }
-  })
-  res.status(200).end()
+  try{
+    await Apply.destroy({
+      where: {
+        id: req.params.id
+      }
+    })
+    res.status(200).end()
+  } catch (error) {
+    res.status(500).send(error)
+  }
 }
 
 const acceptEmployee = async (req, res) => {
-  await Apply.update(
-    {
-      status: INVITATION
-    },
-    {
-    where: {
-      id: req.body.applyId
-    }
-  })
-  const apply = await Apply.findByPk(req.body.applyId)
-  const vacancy = await Vacancy.findByPk(apply.vacancyId)
-  const resume = await Resume.findByPk(apply.resumeId)
-  const user = await User.findByPk(resume.userId)
-  //  CompanyId с большой буквы
-  const company = await Company.findByPk(req.user.CompanyId)
+  try{
+    await Apply.update(
+      {
+        status: INVITATION
+      },
+      {
+      where: {
+        id: req.body.applyId
+      }
+    })
+    const apply = await Apply.findByPk(req.body.applyId)
+    const vacancy = await Vacancy.findByPk(apply.vacancyId)
+    const resume = await Resume.findByPk(apply.resumeId)
+    const user = await User.findByPk(resume.userId)
+    //  CompanyId с большой буквы
+    const company = await Company.findByPk(req.user.CompanyId)
 
 
-  sendMail(user.email, `Вы были приглашены на вакансию ${vacancy.name}`, `
-  Компания: ${company.name}, пригласила вас на вакансию ${vacancy.name}, приходите по адресу ${company.address}
-  или свяжитесь с Менеджером ${req.user.full_name}, ${req.user.phone}, ${req.user.email}
-  `)
+    sendMail(user.email, `Вы были приглашены на вакансию ${vacancy.name}`, `
+    Компания: ${company.name}, пригласила вас на вакансию ${vacancy.name}, приходите по адресу ${company.address}
+    или свяжитесь с Менеджером ${req.user.full_name}, ${req.user.phone}, ${req.user.email}
+    `)
 
-  res.status(200).end()
+    res.status(200).end()
+  } catch (error) {
+    res.status(500).send(error)
+  }
 }
 
 const declineEmployee = async (req, res) => {
-  await Apply.update(
-    {
-      status: DECLINED
-    },
-    {
-    where: {
-      id: req.body.applyId
-    }
-  })
+
+  try {
+    await Apply.update(
+      {
+        status: DECLINED
+      },
+      {
+      where: {
+        id: req.body.applyId
+      }
+    })
 
 
-  const apply = await Apply.findByPk(req.body.applyId)
-  const vacancy = await Vacancy.findByPk(apply.vacancyId)
-  const resume = await Resume.findByPk(apply.resumeId)
-  const user = await User.findByPk(resume.userId)
-  const company = await Company.findByPk(req.user.CompanyId)
+    const apply = await Apply.findByPk(req.body.applyId)
+    const vacancy = await Vacancy.findByPk(apply.vacancyId)
+    const resume = await Resume.findByPk(apply.resumeId)
+    const user = await User.findByPk(resume.userId)
+    const company = await Company.findByPk(req.user.CompanyId)
 
-  sendMail(user.email, `Отказ на вакансию ${vacancy.name}`, `
-  Компания: ${company.name}, к сожалению ваша кандидатура не подходит на вакансию ${vacancy.name} 
-  `)
+    sendMail(user.email, `Отказ на вакансию ${vacancy.name}`, `
+    Компания: ${company.name}, к сожалению ваша кандидатура не подходит на вакансию ${vacancy.name} 
+    `)
 
-  res.status(200).end()
+    res.status(200).end()
+  } catch (error) {
+    res.status(500).send(error)
+  }
 }
 
 const getVacancyApplies = async (req, res) => {
-
-  const options = {
-    vacancyId: req.params.id
-  }
-
-  if(req.query.status && (req.query.status === NEW || req.query.status === DECLINED || req.query.status === INVITATION)){
-    options.status = req.query.status
-  }
-
-  const applies = await Apply.findAll({
-    where: options,
-    include: {
-      model: Resume,
-      as: 'resume'
+  try {
+    const options = {
+      vacancyId: req.params.id
     }
-  })
-  res.status(200).send(applies)
+
+    if(req.query.status && (req.query.status === NEW || req.query.status === DECLINED || req.query.status === INVITATION)){
+      options.status = req.query.status
+    }
+
+    const applies = await Apply.findAll({
+      where: options,
+      include: {
+        model: Resume,
+        as: 'resume'
+      }
+    })
+    res.status(200).send(applies)
+  } catch (error) {
+    res.status(500).send(error)
+  }
 }
 
 module.exports = {
