@@ -85,10 +85,31 @@ const declineEmployee = async (req, res) => {
   res.status(200).end()
 }
 
+const getVacancyApplies = async (req, res) => {
+
+  const options = {
+    vacancyId: req.params.id
+  }
+
+  if(req.query.status && (req.query.status === NEW || req.query.status === DECLINED || req.query.status === INVITATION)){
+    options.status = req.query.status
+  }
+
+  const applies = await Apply.findAll({
+    where: options,
+    include: {
+      model: Resume,
+      as: 'resume'
+    }
+  })
+  res.status(200).send(applies)
+}
+
 module.exports = {
   createApply,
   getEmployeeApplies,
   deleteApply,
   acceptEmployee,
-  declineEmployee
+  declineEmployee,
+  getVacancyApplies
 }
