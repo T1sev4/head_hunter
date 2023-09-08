@@ -4,7 +4,8 @@ const sendMail = require('../utils/sendMail')
 const Vacancy = require('../vacancy/models/Vacancy')
 const Resume = require('../resume/models/Resume')
 const User = require('../auth/User');
-const {Op} = require('sequelize')
+const {Op} = require('sequelize');
+const Company = require('../auth/Company');
 const createApply = async (req, res) => {
   try {
     const apply = await Apply.create({
@@ -69,6 +70,19 @@ const acceptEmployee = async (req, res) => {
       id: req.body.applyId
     }
   })
+  const apply = await Apply.findByPk(req.body.applyId)
+  const vacancy = await Vacancy.findByPk(apply.vacancyId)
+  const resume = await Resume.findByPk(apply.resumeId)
+  const user = await User.findByPk(resume.userId)
+  //  CompanyId с большой буквы
+  const company = await Company.findByPk(req.user.CompanyId)
+
+
+  sendMail(user.email, `Вы были приглашены на вакансию ${vacancy.name}`, `
+  Компания: ${company.name}, пригласила вас на вакансию ${vacancy.name}, приходите по адресу ${company.address}
+  или свяжитесь с Менеджером ${req.user.full_name}, ${req.user.phone}, ${req.user.email}
+  `)
+
   res.status(200).end()
 }
 
@@ -82,6 +96,18 @@ const declineEmployee = async (req, res) => {
       id: req.body.applyId
     }
   })
+
+
+  const apply = await Apply.findByPk(req.body.applyId)
+  const vacancy = await Vacancy.findByPk(apply.vacancyId)
+  const resume = await Resume.findByPk(apply.resumeId)
+  const user = await User.findByPk(resume.userId)
+  const company = await Company.findByPk(req.user.CompanyId)
+
+  sendMail(user.email, `Отказ на вакансию ${vacancy.name}`, `
+  Компания: ${company.name}, к сожалению ваша кандидатура не подходит на вакансию ${vacancy.name} 
+  `)
+
   res.status(200).end()
 }
 
