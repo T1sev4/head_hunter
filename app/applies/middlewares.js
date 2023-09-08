@@ -35,8 +35,16 @@ const isAuthorOfApply = async (req, res, next) => {
     }
   }
 }
+const isApplyExist = async (req, res, next) => {
+  const apply = await Apply.findByPk(req.body.applyId)
+  if(!apply) res.status(400).send({message: "apply with that id is not exist"})
+
+  req.body.id = apply.vacancyId
+  next()
+}
 
 module.exports = {
   validateApply,
-  isAuthorOfApply
+  isAuthorOfApply,
+  isApplyExist
 }

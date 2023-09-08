@@ -22,7 +22,7 @@ const validateVacancy = (req, res, next) => {
     else next()
 }
 
-const isAuthOfVacancy = async (req, res, next) => {
+const isAuthorOfVacancy = async (req, res, next) => {
   const id = req.params.id || req.body.id
   const vacancy = await Vacancy.findByPk(id)
 
@@ -33,5 +33,5 @@ const isAuthOfVacancy = async (req, res, next) => {
 
 module.exports = {
   validateVacancy,
-  isAuthOfVacancy
+  isAuthorOfVacancy
 }

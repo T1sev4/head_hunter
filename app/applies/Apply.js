@@ -14,6 +14,7 @@ Apply.belongsTo(Resume, {
 });
 Apply.belongsTo(Vacancy, {
   foreignKey: 'vacancyId',
+  as: 'vacancy'
 });
 
 
