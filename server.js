@@ -1,6 +1,7 @@
 const express = require('express');
 const logger = require('morgan');
 const passport = require('passport');
+const cors = require('cors')
 const app = express();
 
 app.use(logger('dev'));
@@ -8,7 +9,7 @@ app.use(express.static(__dirname + '/public'))
 app.use(express.urlencoded());
 app.use(express.json());
 app.use(passport.initialize());
-
+app.use(cors())
 require('./app/auth/passport');
 
 app.use(require('./app/auth/routes'));
