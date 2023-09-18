@@ -2,7 +2,7 @@ const Resume = require('./models/Resume');
 const WorkingHistory = require('./models/WorkingHistory');
 const Education = require('./models/Education');
 const ForeignLanguage = require('./models/ForeignLanguage')
-const ResumeEmploymentType = require('./models/ResumeEmploymentType');
+const ResumeEmploymentTypes = require('./models/ResumeEmploymentTypes');
 const EmploymentType = require('../employment-type/EmploymentType');
 const City = require('../region/City');
 const Country = require('../region/Country');
@@ -61,7 +61,7 @@ const createResume = async (req, res) => {
     }
     if(req.body.employmentTypes && req.body.employmentTypes.length > 0){
       req.body.employmentTypes.forEach( async employmentTypeId => {
-        await ResumeEmploymentType.create({
+        await ResumeEmploymentTypes.create({
           resumeId: resume.id,
           employmentTypeId: employmentTypeId
         })
@@ -165,7 +165,7 @@ const editResume = async (req, res) => {
         resumeId: req.body.id
       }
     })
-    await ResumeEmploymentType.destroy({
+    await ResumeEmploymentTypes.destroy({
       where: {
         resumeId: req.body.id
       }
@@ -215,7 +215,7 @@ const editResume = async (req, res) => {
     }
     if(req.body.employmentTypes && req.body.employmentTypes.length > 0){
       req.body.employmentTypes.forEach( async employmentTypeId => {
-        await ResumeEmploymentType.create({
+        await ResumeEmploymentTypes.create({
           resumeId: resume.id,
           employmentTypeId: employmentTypeId
         })
