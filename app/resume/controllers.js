@@ -83,7 +83,7 @@ const getMyResumes = async (req, res) => {
   }
 }
 const getResume = async (req, res) => {
-  try{
+  
     const resume = await Resume.findByPk(req.params.id, {
       // делаем запрос в несколько таблиц благодаря связям
       include: [
@@ -114,9 +114,7 @@ const getResume = async (req, res) => {
       ]
     });
     res.status(200).send(resume);
-  } catch (error) {
-    res.status(500).send(error)
-  }
+  
 }
 
 const deleteResume = async (req, res) => {
