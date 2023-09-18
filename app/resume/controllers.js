@@ -83,7 +83,7 @@ const getMyResumes = async (req, res) => {
   }
 }
 const getResume = async (req, res) => {
-  
+  try {
     const resume = await Resume.findByPk(req.params.id, {
       // делаем запрос в несколько таблиц благодаря связям
       include: [
@@ -114,7 +114,9 @@ const getResume = async (req, res) => {
       ]
     });
     res.status(200).send(resume);
-  
+  } catch (error) {
+    res.status(500).send(error)
+  }
 }
 
 const deleteResume = async (req, res) => {
@@ -167,7 +169,7 @@ const editResume = async (req, res) => {
     })
     await ResumeEmploymentTypes.destroy({
       where: {
-        resumeId: req.body.id
+        ResumeId: req.body.id
       }
     })
     await ForeignLanguage.destroy({
@@ -216,8 +218,8 @@ const editResume = async (req, res) => {
     if(req.body.employmentTypes && req.body.employmentTypes.length > 0){
       req.body.employmentTypes.forEach( async employmentTypeId => {
         await ResumeEmploymentTypes.create({
-          resumeId: resume.id,
-          employmentTypeId: employmentTypeId
+          ResumeId: resume.id,
+          EmploymentTypeId: employmentTypeId
         })
       });
     }
