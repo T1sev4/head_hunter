@@ -22,7 +22,7 @@ app.use(require('./app/specializations/routes'))
 app.use(require('./app/vacancy/routes'))
 app.use(require('./app/applies/routes'))
 
-app.listen(3000, () => {
+app.listen(3002, () => {
   console.log('server is listening on port 3000')
 })
 
