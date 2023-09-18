@@ -216,7 +216,7 @@ const editResume = async (req, res) => {
     if(req.body.employmentTypes && req.body.employmentTypes.length > 0){
       req.body.employmentTypes.forEach( async employmentTypeId => {
         await ResumeEmploymentTypes.create({
-          resumeId: resume.id,
+          ResumeId: resume.id,
           employmentTypeId: employmentTypeId
         })
       });
